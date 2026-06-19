@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowTok Poster — Authorization</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 720px; margin: 0 auto; padding: 48px 20px; line-height: 1.6;
+            color: #222; background: #fafafa; text-align: center; }
+        h1 { color: #111; }
+        .code { font-family: ui-monospace, Menlo, monospace; font-size: 15px;
+            background: #fff; border: 1px solid #ddd; border-radius: 10px;
+            padding: 18px; margin: 18px 0; word-break: break-all; user-select: all; }
+        button { font-size: 16px; padding: 12px 22px; border: 0; border-radius: 8px;
+            background: #fe2c55; color: #fff; cursor: pointer; }
+        .ok { color: #0a7d28; font-weight: 600; }
+        .err { color: #c00; }
+    </style>
+</head>
+<body>
+    <h1>FlowTok Poster</h1>
+    <p id="msg">Reading authorization…</p>
+    <div class="code" id="code"></div>
+    <button id="copy" style="display:none" onclick="doCopy()">Copy code</button>
+    <p id="hint" style="display:none">Copy this whole code and paste it back to finish setup.</p>
+
+    <script>
+        function qp(name){ return new URLSearchParams(location.search).get(name); }
+        var code = qp('code'); var err = qp('error');
+        var msg = document.getElementById('msg');
+        var box = document.getElementById('code');
+        if (err) {
+            msg.className='err'; msg.textContent='Authorization failed: '+err+' '+(qp('error_description')||'');
+        } else if (code) {
+            msg.className='ok'; msg.textContent='Authorized successfully ✓';
+            box.textContent = code;
+            document.getElementById('copy').style.display='inline-block';
+            document.getElementById('hint').style.display='block';
+        } else {
+            msg.textContent='Open this page from the TikTok login link.';
+        }
+        function doCopy(){ navigator.clipboard.writeText(code).then(function(){
+            document.getElementById('copy').textContent='Copied ✓'; }); }
+    </script>
+</body>
+</html>
